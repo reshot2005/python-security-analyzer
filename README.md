@@ -1,104 +1,108 @@
-# python-security-analyzer
+    # Python Security Analyzer — Offline Code Security / DevSecOps Tool
 
-**Category:** Template / Demonstration  
-**Schema version:** secintel v1.0.0  
-**Status:** Template instance — replace with a real tool via `scripts/new_tool.py`
+    [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+    [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+    [![Offline](https://img.shields.io/badge/mode-offline%20first-important.svg)](#)
+    [![secintel](https://img.shields.io/badge/schema-secintel%20v1-purple.svg)](https://github.com/reshot2005/secintel-core)
+    [![GitHub](https://img.shields.io/badge/github-reshot2005%2Fpython-security-analyzer-black.svg)](https://github.com/reshot2005/python-security-analyzer)
 
-## What problem does this solve?
+    > **Python SAST for secrets, eval/exec, and insecure deserialization — offline Python code security analyzer for DevSecOps pipelines.**
 
-Establishes a file integrity baseline by computing SHA-256 hashes. This template demonstrates the full collection toolchain: CLI, schema validation, provenance, HTML report, and export formats.
+    **Category:** Code Security / DevSecOps  
+    **Collection phase tool:** 1/10  
+    **Schema:** [secintel-core](https://github.com/reshot2005/secintel-core) v1  
+    **Repository:** https://github.com/reshot2005/python-security-analyzer  
+    **Author account:** [reshot2005](https://github.com/reshot2005)
 
-## Why are existing tools insufficient?
+    ## Why Python Security Analyzer ranks for security search
 
-| Tool | Gap |
-|------|-----|
-| `sha256sum` | No provenance, no evidence taxonomy, no report |
-| `md5sum` | Weak hash, same gaps |
-| VirusTotal | Requires upload (violates offline boundary) |
-| Autopsy | Full forensic suite — overkill for a single-file hash |
+    Python Security Analyzer is an **offline-first**, research-grade **code security / devsecops** utility designed for practitioners who need reproducible analysis without uploading sensitive artifacts to SaaS scanners. It emits structured findings through the shared **secintel** evidence taxonomy (OBSERVED / DERIVED / INFERRED / CORRELATED / VERIFIED) so results are auditable, exportable, and CI-friendly.
 
-## What is technically novel?
+    ### Primary SEO keywords
+    `Python SAST, Python security scanner, eval detection, deserialization security, Python secrets scan`
 
-This is a **template demonstration**, not a novel tool. Its purpose is to prove the `module-template` scaffold works end-to-end. Real tools bootstrapped from this template must document their own novelty in `docs/methodology.md`.
+    ### Topics
+    `devsecops` `application-security` `sast` `secure-coding` `cybersecurity` `code-security` `sbom` `security-tools` `python` `offline-security` `python-security` `ast`
 
-## Evidence and confidence
+    ## What problem does this solve?
 
-- Produces exactly one `OBSERVED` finding per input file.
-- No confidence score (OBSERVED findings forbid confidence per schema rules).
-- Full provenance: tool version, config hash, input SHA-256, timestamps.
+    Statically analyze Python source for dangerous patterns: secrets, eval/exec, and insecure deserialization — fully offline.
 
-## Quick start (5 minutes)
+    Offline focused Python SAST with evidence schema.
 
-```bash
-cd module-template
-py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -e ../secintel-core
-pip install -e ".[dev]"
+    ## Key features
 
-# Analyze the sample file
-python-security-analyzer analyze sample_data/example.txt --json
+    - AST-oriented Python scanning
+- Secrets & dangerous API detection
+- Insecure deserialization flags
+- CI-friendly JSON/SARIF
+- Local-only analysis
 
-# Generate HTML report
-python-security-analyzer analyze sample_data/example.txt --html report.html
-```
+    ## Ideal use cases
 
-### Sample output
+    - Pre-commit Python security checks
+- PR review assistance
+- Legacy code audits
 
-```json
-{
-  "schema_version": "1.0.0",
-  "findings": [
-    {
-      "id": "...",
-      "title": "File inventory: example.txt",
-      "classification": "OBSERVED",
-      "evidence": [{"source": "...", "sha256": "...", "excerpt": "..."}],
-      "method": "SHA-256 hash of file contents"
-    }
-  ]
-}
-```
+    ## Who should use this
 
-## Advanced usage
+    - Security engineers & AppSec / NetSec specialists
+    - SOC / DFIR / malware analysts (as applicable)
+    - Bug bounty hunters and penetration testers
+    - DevSecOps teams needing offline/air-gapped tooling
+    - Students and researchers learning code security / devsecops
 
-```bash
-# Export to multiple formats
-python-security-analyzer analyze sample_data/example.txt \
-  --json --html report.html --csv findings.csv --sarif results.sarif
+    ## Quick start
 
-# Mark as sample data (banner in HTML report)
-python-security-analyzer analyze sample_data/example.txt --sample --html report.html
+    ```bash
+    git clone https://github.com/reshot2005/python-security-analyzer.git
+    cd python-security-analyzer
+    python3.12 -m venv .venv
+    source .venv/bin/activate  # Windows: .venv\Scripts\Activate.ps1
+    pip install -e ../secintel-core  # or: pip install -e git+https://github.com/reshot2005/secintel-core.git#egg=secintel-core
+    pip install -e ".[dev]"
 
-# Limit file size
-python-security-analyzer analyze large.bin --max-bytes 10485760
-```
+    python-security-analyzer analyze sample_data --json
+    python-security-analyzer analyze sample_data --html report.html
+    python-security-analyzer version
+    ```
 
-## Reproducibility
+    ### Exports for interoperability
 
-Re-run with fixed epoch for deterministic timestamps:
+    ```bash
+    python-security-analyzer analyze sample_data \
+      --json --html report.html --csv findings.csv --sarif results.sarif
+    ```
 
-```powershell
-$env:SECINTEL_SOURCE_DATE_EPOCH = "1704067200"
-python-security-analyzer analyze sample_data/example.txt --json
-```
+    ## Evidence quality & reproducibility
 
-Two runs with the same input, config, and tool version produce byte-identical finding IDs and config hashes.
+    - Findings follow **secintel** classification rules (confidence only where schema allows).
+    - Provenance includes tool version, config hash, and input integrity metadata.
+    - Set `SECINTEL_SOURCE_DATE_EPOCH` for deterministic timestamps in CI.
 
-## Bootstrap a new tool
+    ```bash
+    export SECINTEL_SOURCE_DATE_EPOCH=1704067200
+    python-security-analyzer analyze sample_data --json
+    ```
 
-```bash
-python scripts/new_tool.py --slug my-tool --name "My Tool" --output ../my-tool
-```
+    ## Development
 
-## Development
+    ```bash
+    ruff check src tests
+    mypy src
+    pytest
+    ```
 
-```bash
-ruff check src tests
-mypy src
-pytest
-```
+    ## Related tools in this collection
 
-## License
+    Browse more offline security research tools by [reshot2005](https://github.com/reshot2005?tab=repositories): network security, web AppSec, DevSecOps, digital forensics, and static malware analysis — each in its own public repository with the same secintel reporting contract.
 
-MIT
+    ## License
+
+    MIT — free for research, education, and commercial use with attribution preserved.
+
+    ---
+
+    ### Discoverability blurb (search engines & GitHub)
+
+    **Python Security Analyzer (python-security-analyzer)** — Python SAST for secrets, eval/exec, and insecure deserialization — offline Python code security analyzer for DevSecOps pipelines. Search terms: Python SAST, Python security scanner, eval detection, deserialization security, Python secrets scan. Open-source, MIT-licensed, Python 3.12, offline cybersecurity tool by reshot2005.
